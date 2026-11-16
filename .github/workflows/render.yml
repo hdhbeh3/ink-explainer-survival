@@ -1,3 +1,4 @@
+
 name: Render Ink Explainer Video
 
 on:
@@ -25,11 +26,9 @@ jobs:
           python-version: "3.11"
 
       - name: Extract project ZIP
-        id: extract
         run: |
           mkdir -p project
           unzip -o ink-explainer-survival-starter.zip -d project
-          echo "ZIP CONTENTS:"
           find project -maxdepth 4 -type f
 
       - name: Locate package.json
@@ -38,13 +37,12 @@ jobs:
           PACKAGE=$(find project -name package.json -type f -print -quit)
 
           if [ -z "$PACKAGE" ]; then
-            echo "ERROR: package.json not found in ZIP"
+            echo "package.json not found"
             exit 1
           fi
 
           PROJECT_DIR=$(dirname "$PACKAGE")
           echo "project_dir=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
-          echo "Project folder: $PROJECT_DIR"
 
       - name: Install dependencies
         working-directory: ${{ steps.locate.outputs.project_dir }}
@@ -58,12 +56,12 @@ jobs:
         working-directory: ${{ steps.locate.outputs.project_dir }}
         run: |
           mkdir -p out
-          npx remotion render src/index.ts Main out/survival-in-the-wild.mp4
+          npx remotion render src/index.ts Survivalinthewild out/survival-in-the-wild.mp4
 
       - name: Upload rendered video
         uses: actions/upload-artifact@v4
         with:
           name: survival-in-the-wild
-          path: project/**/out/survival-in-the-wild.mp4
+          path: ${{ steps.locate.outputs.project_dir }}/out/survival-in-the-wild.mp4
           if-no-files-found: error
           
