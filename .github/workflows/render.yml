@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{ steps.locate.outputs.project_dir }}
         run: |
           mkdir -p out
-          npx remotion render src/index.ts "Survival in Thewild" out/survival-in-the-wild.mp4
+          npx remotion render src/index.ts SurvivalInTheWild out/survival-in-the-wild.mp4
 
       - name: Upload rendered video
         uses: actions/upload-artifact@v4
@@ -61,3 +61,4 @@ jobs:
           name: survival-in-the-wild
           path: ${{ steps.locate.outputs.project_dir }}/out/survival-in-the-wild.mp4
           if-no-files-found: error
+          
