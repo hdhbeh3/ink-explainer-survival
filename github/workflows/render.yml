@@ -1,0 +1,47 @@
+
+name: Render Ink Explainer Video
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: |
+          unzip -o ink-explainer-survival-starter.zip -d .
+          ls -la
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Check project
+        run: npm run typecheck
+
+      - name: Render video
+        run: npx remotion render src/index.ts Main out/survival-in-the-wild.mp4
+
+      - name: Upload rendered video
+        uses: actions/upload-artifact@v4
+        with:
+          name: survival-in-the-wild
+          path: out/survival-in-the-wild.mp4
+          
