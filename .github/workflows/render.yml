@@ -28,7 +28,7 @@ jobs:
       - name: Extract project ZIP
         run: |
           mkdir -p project
-          unzip -o ink-explainer-survival-starter.zip -d project
+          unzip -o ink-explainer-survival-complete.zip -d project
 
       - name: Locate package.json
         id: locate
